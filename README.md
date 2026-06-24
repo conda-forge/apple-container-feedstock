@@ -17,12 +17,18 @@ Documentation: https://apple.github.io/container/documentation/
 virtual machines on Apple silicon Macs. It is written in Swift, consumes and
 produces OCI-compatible container images, and is supported on macOS 26.
 
-
 Current build status
 ====================
 
 
-<table>
+<table><tr>
+    <td>GitHub Actions</td>
+    <td>
+      <a href="https://github.com/conda-forge/apple-container-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/apple-container-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
+      </a>
+    </td>
+  </tr>
 </table>
 
 Current release info
