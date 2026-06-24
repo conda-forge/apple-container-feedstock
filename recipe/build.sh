@@ -7,7 +7,6 @@ set -euo pipefail
 # networking APIs (guarded by `@available(macOS 26, *)`), so the macOS 26 SDK
 # (MACOSX_SDK_VERSION=26) is required to build.
 SWIFT="${SWIFT:-/usr/bin/swift}"
-export SDKROOT="${CONDA_BUILD_SYSROOT}"
 
 "${SWIFT}" build -c release
 
