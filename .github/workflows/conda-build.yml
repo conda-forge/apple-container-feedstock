@@ -31,7 +31,7 @@ jobs:
             os: macos
             pagefile_size: 0
             resize_partitions: False
-            runs_on: ['macos-15']
+            runs_on: ['macos-26']
             tools_install_dir: ~/miniforge3
     steps:
 
