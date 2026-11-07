@@ -82,4 +82,5 @@ about:
 extra:
   feedstock-name: apple-container
   recipe-maintainers:
+    - cbourjau
     - xhochy
