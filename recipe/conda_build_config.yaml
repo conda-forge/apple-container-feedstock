@@ -1,8 +1,8 @@
 # `container` uses macOS 26 virtualization and networking APIs, so it must be
-# built against the macOS 26 SDK (resolved to MacOSX26.1.sdk by conda-forge's
-# conda-forge-ci-setup).
-MACOSX_SDK_VERSION:
-  - "26"
+# built against the macOS 26 SDK and requires macOS 26 at runtime (`__osx`
+# run export of the C stdlib).
+c_stdlib_version:
+  - "26.0"
 # The Swift 6.2 toolchain (Xcode 26) required by `Package.swift` is only
 # available on the macOS 26 runners.
 github_actions_labels:

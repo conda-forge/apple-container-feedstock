@@ -15,6 +15,12 @@ build:
   # on macOS 26 (Apple silicon).
   skip:
     - not (osx and arm64)
+  dynamic_linking:
+    # The binaries link only against system libraries and embed no prefix. Relinking
+    # would drop the `/usr/lib/swift` rpath (needed for e.g.
+    # `libswiftCompatibilitySpan.dylib`) and re-sign the binaries ad hoc, discarding
+    # the entitlements applied in build.sh.
+    binary_relocation: false
   script:
     file: build.sh
     env:
@@ -25,17 +31,24 @@ build:
 
 requirements:
   build:
+    # Only for the `__osx` run export; the binaries are built with the system
+    # Swift toolchain (Xcode 26 / Swift 6.2), which conda-forge does not ship.
+    - ${{ stdlib('c') }}
     # Swift Package Manager uses git to resolve the pinned dependencies.
     - git
   # No host/run conda dependencies: the binaries are self-contained Swift
   # executables that link only against system frameworks (and the Swift runtime
-  # shipped with macOS 26). They are built with the system Swift toolchain
-  # (Xcode 26 / Swift 6.2), which conda-forge does not ship.
+  # shipped with macOS 26).
 
 tests:
   - script:
       - container --version
       - container --help
+      # Fails if the package or its installation modified a signed binary.
+      - for f in $PREFIX/bin/container $PREFIX/bin/container-apiserver $PREFIX/libexec/container/plugins/*/bin/*; do codesign --verify --strict "$f"; done
+      # The runtime and network plugins need the virtualization entitlement.
+      - codesign -d --entitlements - --xml $PREFIX/libexec/container/plugins/container-runtime-linux/bin/container-runtime-linux | grep -q com.apple.security.virtualization
+      - codesign -d --entitlements - --xml $PREFIX/libexec/container/plugins/container-network-vmnet/bin/container-network-vmnet | grep -q com.apple.security.virtualization
   - package_contents:
       files:
         - bin/container
@@ -43,7 +56,14 @@ tests:
         - libexec/container/plugins/container-runtime-linux/bin/container-runtime-linux
         - libexec/container/plugins/container-network-vmnet/bin/container-network-vmnet
         - libexec/container/plugins/container-core-images/bin/container-core-images
+        - libexec/container/plugins/container-core-clusters/bin/container-core-clusters
         - libexec/container/plugins/machine-apiserver/bin/machine-apiserver
+        - libexec/container/plugins/machine-apiserver/resources/init
+        - libexec/container/plugins/cluster/bin/cluster
+        - libexec/container/plugins/cluster/resources/kindnet.yaml
+        - libexec/container/plugins/cluster-hoststore/bin/cluster-hoststore
+        - libexec/container/plugins/build/bin/build
+        - libexec/container/plugins/builder/bin/builder
 
 about:
   homepage: https://github.com/apple/container
