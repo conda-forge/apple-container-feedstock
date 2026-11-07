@@ -1,5 +1,5 @@
 context:
-  version: "1.0.0"
+  version: "1.4.1"
 
 package:
   name: apple-container
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/apple/container/archive/refs/tags/${{ version }}.tar.gz
-  sha256: 9f5379d400d23b6f296b7bae8f71f982dfdc1d52bf072ac81318472a734d21f7
+  sha256: 6d868bae4409d2043ee334b0c4658d621bd707d932ee147a1e145b0b08c4cade
 
 build:
   number: 0
